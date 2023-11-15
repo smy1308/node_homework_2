@@ -1,21 +1,22 @@
-require('dotenv').config();
+require("dotenv").config();
 
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = process.env.port;
 
-const productsRouter = require('./routes/products.router.js');
-const connect = require('./schemas/index');
+const connect = require("./schemas/index");
+const productsRouter = require("./routes/products.router.js");
+const usersRouter = require("./routes/user.routes.js");
 connect();
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
-app.use('/api', [productsRouter]);
-  
+app.use("/api", [productsRouter, usersRouter]);
+
 app.listen(port, () => {
-    console.log(port, '포트로 서버가 열렸어요!');
+  console.log(port, "포트로 서버가 열렸어요!");
 });
