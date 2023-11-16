@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("../schemas/products.schema.js");
+const Product = require("../models/products.model.js");
 
 //상품 등록 api
 router.post("/products", async (req, res) => {

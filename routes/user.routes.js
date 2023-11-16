@@ -1,16 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const User = require("../schemas/user.schemas");
+const User = require("../models/user.model");
 
 // 회원가입 API
 router.post("/users", async (req, res) => {
   const { email, nickname, password, confirmPassword } = req.body;
 
   if (password !== confirmPassword) {
-    res.status(400).json({
-      errorMessage: "패스워드가 패스워드 확인란과 다릅니다."
-    });
+    res.status(400).json({ errorMessage: "패스워드가 패스워드 확인란과 다릅니다." });
     return;
   }
 
@@ -18,9 +16,7 @@ router.post("/users", async (req, res) => {
     $or: [{ email }, { nickname }]
   });
   if (existsUsers) {
-    res.status(400).json({
-      errorMessage: "이메일 또는 닉네임이 이미 사용중입니다."
-    });
+    res.status(400).json({ errorMessage: "이메일 또는 닉네임이 이미 사용중입니다." });
     return;
   }
 
