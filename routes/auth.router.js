@@ -8,17 +8,20 @@ const User = require("../models/user.model");
 router.post("/auth", async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({
+    where: {
+      email
+    }
+  });
 
   if (!user || password !== user.password) {
-    res.status(400).json({ errorMessage: "이메일 또는 패스워드가 틀렸습니다." });
+    res.status(400).send({ errorMessage: "이메일 또는 패스워드가 틀렸습니다." });
     return;
   }
 
-  const token = jwt.sign({ userId: user.userId }, "nbc-secret-key");
-
-  res.cookie("Authorization", `Bearer ${token}`);
-  res.status(200).json({ token });
+  res.send({
+    token: jwt.sign({ userId: user.userId }, "nbc-secret-key")
+  });
 });
 
 module.exports = router;
