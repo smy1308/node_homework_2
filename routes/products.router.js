@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/products.model.js");
+const authMiddleware = require("../middlewares/need-signin.middlware");
 
 //상품 등록 api
 router.post("/products", async (req, res) => {
@@ -74,24 +75,28 @@ router.put("/products/:productId", async (req, res) => {
 });
 
 //상품 제거 api
-router.delete("/products/:productId", async (req, res) => {
+router.delete("/products/:productId", authMiddleware, async (req, res) => {
   try {
     if (!req.body || !req.params) {
       return res.status(400).json({ message: "데이터 형식이 올바르지 않습니다." });
     }
 
-    const productId = req.params.productId;
-    const { password } = req.body;
-    const product = await Product.findById(req.params.productId);
+    const { productId } = req.params;
+    const { userId } = req.locals.user;
+    const product = await Product.findOne({ where: { productId } });
 
     if (!product) {
       return res.status(404).json({ message: "상품 조회에 실패하였습니다." });
     }
-    if (password !== product.password) {
+    if (userId !== this.post.userId) {
       return res.status(401).json({ message: "상품을 삭제할 권한이 존재하지 않습니다." });
     }
 
-    await product.deleteOne({ id: productId });
+    await product.destroy({
+      where: {
+        [Op.and]: [{ productId }, { UserId: userId }]
+      }
+    });
     res.json({ message: "상품을 삭제하였습니다." });
   } catch (error) {
     res.status(500).send({ message: "상품 삭제 중 오류가 발생했습니다." });

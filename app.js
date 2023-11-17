@@ -1,11 +1,10 @@
-require("dotenv").config();
-
 const express = require("express");
 const app = express();
-const port = process.env.port;
+const port = 3000;
 
 // const connect = require("./models/index");
 // connect();
+const { sequelize } = require("./models");
 const cookieParser = require("cookie-parser");
 const productsRouter = require("./routes/products.router.js");
 const usersRouter = require("./routes/user.routes.js");
