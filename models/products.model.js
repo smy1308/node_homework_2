@@ -19,13 +19,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING
       },
       status: {
-        type: DataTypes.STRING,
-        enum: ["FOR_SALE", "SOLD_OUT"],
-        default: "FOR_SALE"
+        type: DataTypes.ENUM("FOR_SALE", "SOLD_OUT"),
+        defaultValue: "FOR_SALE"
       }
     },
     {
       sequelize,
+      timestamps: true,
       modelName: "Product"
     }
   );

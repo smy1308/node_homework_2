@@ -19,7 +19,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.ENUM("FOR_SALE", "SOLD_OUT"),
+        defaultValue: "FOR_SALE"
       },
       createdAt: {
         allowNull: false,
